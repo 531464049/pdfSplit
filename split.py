@@ -7,15 +7,17 @@ import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import time
 
-SUBFILEPAGE = 20  # 分割页数
+INPUT_FILE = "test.pdf"   # 待分割文件
+OUTOUT_FILE_NAME = "split"  # 分割后的文件名
+SUBFILE_PAGE_NUM = 20  # 分割页数
 
 
 def subsplit(a, reader, pageCount):
     output = PdfFileWriter()
-    outfile = "split" + str(a) + ".pdf"  # 分割后的文件
+    outfile = OUTOUT_FILE_NAME + str(a) + ".pdf"  # 分割后的文件
 
-    for ipage in range(SUBFILEPAGE):
-        kp = ipage + SUBFILEPAGE * a
+    for ipage in range(SUBFILE_PAGE_NUM):
+        kp = ipage + SUBFILE_PAGE_NUM * a
         if kp < pageCount:
             output.addPage(reader.getPage(kp))
 
@@ -26,12 +28,11 @@ def subsplit(a, reader, pageCount):
 
 
 def split():
-    pdf_file = "test.pdf"  # 原始文件
-    reader = PdfFileReader(open(pdf_file, "rb"))
+    reader = PdfFileReader(open(INPUT_FILE, "rb"))
     pageCount = reader.getNumPages()
 
-    subFileNum = (int)(pageCount / SUBFILEPAGE)
-    if pageCount % SUBFILEPAGE > 0:
+    subFileNum = (int)(pageCount / SUBFILE_PAGE_NUM)
+    if pageCount % SUBFILE_PAGE_NUM > 0:
         subFileNum += 1
 
     for k in range(subFileNum):
